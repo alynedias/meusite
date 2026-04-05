@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alyne Psi - Identidade Visual</title>
+
+    <!-- Tailwind CSS (Estilos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React e ReactDOM (Motor do Site) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel (Tradutor de código para o navegador) - Versão Atualizada -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animações personalizadas */
+        @keyframes spin-slow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 12s linear infinite;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animação do Carrossel */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll 25s linear infinite;
+        }
+
+        .pause-hover:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- ÍCONES (SVG Inline para não precisar de instalações) ---
+        const Icon = ({ children, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                {children}
+            </svg>
+        );
+
+        const Calendar = ({ size = 24, className }) => <Icon className={className}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></Icon>;
+        const Clock = ({ size = 24, className }) => <Icon className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></Icon>;
+        const MenuIcon = ({ size = 24, className }) => <Icon className={className}><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></Icon>;
+        const XIcon = ({ size = 24, className }) => <Icon className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></Icon>;
+        const ArrowRight = ({ size = 24, className }) => <Icon className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></Icon>;
+        const Instagram = ({ size = 24, className }) => <Icon className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></Icon>;
+        const MessageCircle = ({ size = 24, className }) => <Icon className={className}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></Icon>;
+        const Mail = ({ size = 24, className }) => <Icon className={className}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></Icon>;
+        const Star = ({ size = 24, className }) => <Icon className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></Icon>;
+        const Sparkles = ({ size = 24, className }) => <Icon className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"></path></Icon>;
+        const Heart = ({ size = 24, className }) => <Icon className={className}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></Icon>;
+        const PsiIcon = ({ size = 24, className }) => <Icon className={className}><path d="M12 22V2"></path><path d="M4 2v4c0 4.418 3.582 8 8 8"></path><path d="M20 2v4c0 4.418-3.582 8-8 8"></path></Icon>;
+
+        // --- APLICAÇÃO PRINCIPAL ---
+        const App = () => {
+            const [isScrolled, setIsScrolled] = React.useState(false);
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+            const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(false);
+
+            React.useEffect(() => {
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            // Nomes das imagens do carrossel
+            const carouselImages = [
+                'alyne_foto1.jpg',
+                'alyne_foto2.jpg',
+                'alyne_foto3.jpg',
+                'alyne_foto4.jpg',
+                'alyne_foto5.jpg',
+                'alyne_foto6.jpg',
+                'alyne_foto7.jpg',
+                'alyne_foto8.jpg'
+            ];
+
+            const handleWhatsAppClick = () => {
+                const phoneNumber = "5535991749264";
+                const message = "Olá, Alyne! Gostaria de saber mais sobre os atendimentos e agendar uma sessão.";
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                setIsBookingModalOpen(false);
+            };
+
+            // Cores personalizadas
+            const colors = {
+                bg: "bg-[#F3F0E6]", // Creme/Bege do fundo
+                darkGreen: "text-[#0A3928]", // Verde escuro da tipografia
+                bgDarkGreen: "bg-[#0A3928]", // Verde escuro de fundo
+                electricBlue: "bg-[#0038FF]", // Azul elétrico vibrante dos destaques
+                textBlue: "text-[#0038FF]",
+            };
+
+            return (
+                <div className={`font-sans ${colors.bg} ${colors.darkGreen} min-h-screen selection:bg-[#0038FF] selection:text-white`}>
+
+                    {/* Navigation */}
+                    <nav className={`fixed w-full z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-[#F3F0E6]/95 border-[#0A3928]/10 py-3' : 'bg-transparent border-transparent py-6'}`}>
+                        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <a href="#" className="text-2xl font-black tracking-tighter uppercase flex items-center gap-1 hover:opacity-80 transition-opacity">
+                                    ALYNE<span className={colors.textBlue}>.PSI</span>
+                                </a>
+                                <a href="https://instagram.com/alynediaas_" target="_blank" rel="noopener noreferrer" className="text-[#0A3928] hover:text-[#0038FF] transition-colors mt-0.5">
+                                    <Instagram size={24} />
+                                </a>
+                            </div>
+
+                            <div className="hidden md:flex space-x-8 items-center font-bold text-sm tracking-widest uppercase">
+                                <a href="#abordagem" className="hover:text-[#0038FF] transition-colors">Abordagem</a>
+                                <a href="#quem-sou" className="hover:text-[#0038FF] transition-colors">Quem Sou</a>
+                                <a href="#servicos" className="hover:text-[#0038FF] transition-colors">Formatos</a>
+                                <button
+                                    onClick={() => setIsBookingModalOpen(true)}
+                                    className={`${colors.bgDarkGreen} text-[#F3F0E6] px-6 py-2 rounded-none hover:bg-[#0038FF] transition-all font-bold border-2 border-transparent hover:border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none`}
+                                >
+                                    Agendar
+                                </button>
+                            </div>
+
+                            <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                                {isMobileMenuOpen ? <XIcon size={28} /> : <MenuIcon size={28} />}
+                            </button>
+                        </div>
+
+                        {isMobileMenuOpen && (
+                            <div className={`md:hidden ${colors.bg} border-b-2 border-black absolute w-full`}>
+                                <div className="flex flex-col p-6 space-y-4 font-bold uppercase tracking-wider text-center">
+                                    <a href="#abordagem" onClick={() => setIsMobileMenuOpen(false)}>Abordagem</a>
+                                    <a href="#quem-sou" onClick={() => setIsMobileMenuOpen(false)}>Quem Sou</a>
+                                    <a href="#servicos" onClick={() => setIsMobileMenuOpen(false)}>Formatos</a>
+                                    <button onClick={() => { setIsBookingModalOpen(true); setIsMobileMenuOpen(false); }} className={`${colors.electricBlue} text-white py-3 mt-2 w-full`}>
+                                        Agendar Horário
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* Hero Section */}
+                    <header id="hero" className="relative pt-32 pb-20 overflow-hidden">
+                        <div className="max-w-7xl mx-auto px-6 relative z-10">
+                            <div className="flex flex-col lg:flex-row items-center gap-16">
+                                <div className="lg:w-3/5 space-y-6">
+                                    <div className="inline-block bg-[#0038FF] text-white px-3 py-1 font-bold text-xs uppercase tracking-widest mb-2 rotate-1">
+                                        Psicologia Real & Visceral
+                                    </div>
+                                    {/* Texto Hero */}
+                                    <h1 className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter uppercase">
+                                        Existe um <br />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0A3928] to-[#0038FF]">caminho possível</span>,<br />
+                                        <span className="text-3xl md:text-5xl block mt-4 leading-tight">
+                                            e você não precisa <span className="underline decoration-[#0038FF] decoration-4 underline-offset-4 whitespace-nowrap">percorrê-lo sozinho.</span>
+                                        </span>
+                                    </h1>
+
+                                    <div className="relative">
+                                        <p className="text-lg md:text-xl font-medium max-w-lg leading-relaxed border-l-4 border-[#0038FF] pl-6 py-2">
+                                            Um espaço para organizar emocionalmente o que já existe no seu universo. Sem filtros, sem julgamentos, apenas a realidade do seu processo.
+                                        </p>
+                                        <div className="absolute -right-10 -top-10 text-[#0A3928] opacity-10 animate-spin-slow">
+                                            <Sparkles size={100} />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                        <button
+                                            onClick={() => setIsBookingModalOpen(true)}
+                                            className={`${colors.bgDarkGreen} text-[#F3F0E6] px-8 py-4 text-lg font-black uppercase tracking-wider hover:bg-[#0038FF] transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none border-2 border-black`}
+                                        >
+                                            Vamos conversar?
+                                        </button>
+                                        <a href="#abordagem" className="px-8 py-4 border-2 border-[#0A3928] text-[#0A3928] font-bold uppercase tracking-wider hover:bg-[#0A3928] hover:text-[#F3F0E6] transition-colors flex items-center justify-center gap-2">
+                                            Entender como funciona <ArrowRight size={20} />
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="lg:w-2/5 relative">
+                                    <div className="relative z-10 border-4 border-[#0A3928] bg-gray-300 aspect-[3/4] shadow-[12px_12px_0px_0px_#0038FF] overflow-hidden group">
+                                        <img
+                                            src="alynesite.jpg"
+                                            alt="Alyne Psicóloga"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gray-200 text-[#0A3928] p-8 text-center font-bold uppercase">Foto não encontrada<br/><span class="text-sm font-normal normal-case">Salve a foto como alynesite.jpg</span></div>'
+                                            }}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div className="absolute bottom-4 right-4 bg-[#0038FF] text-white text-xs font-black uppercase px-2 py-1 rotate-[-4deg]">
+                                            Psi. Alyne
+                                        </div>
+                                    </div>
+
+                                    <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-[#0A3928] rounded-full z-0"></div>
+                                    <div className="absolute top-1/2 -right-12 w-32 h-32 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Quem Sou Section */}
+                    <section id="quem-sou" className="py-16 md:py-32 bg-[#F3F0E6] relative z-10 overflow-hidden">
+                        <div className="max-w-7xl mx-auto px-6 relative z-10">
+                            <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-center md:items-start">
+                                
+                                {/* Bolha Gigante da Esquerda com o Símbolo */}
+                                <div className="md:w-2/5 flex justify-center w-full mt-10 md:mt-0">
+                                    <div className="w-64 h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-full bg-[#0A3928]/5 border-8 border-[#0A3928] flex items-center justify-center shadow-[16px_16px_0px_0px_rgba(0,0,0,0.1)] transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                                        <span className="font-serif text-[170px] md:text-[235px] lg:text-[285px] text-[#0A3928] leading-none select-none">
+                                            Ψ
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                {/* Texto Quem Sou Eu */}
+                                <div className="md:w-3/5 space-y-6">
+                                    <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-[#0A3928] mb-8 text-center md:text-left">
+                                        Quem <br className="hidden md:block"/><span className="text-[#0038FF]">Sou Eu</span>
+                                    </h2>
+                                    <div className="text-xl font-medium leading-relaxed text-[#0A3928] border-l-8 border-[#0038FF] pl-6 md:pl-10 space-y-6">
+                                        <p>
+                                            Sou Alyne, psicóloga formada pela Universidade de Mogi das Cruzes, com experiência junto a crianças, adolescentes, adultos e idosos.
+                                        </p>
+                                        <p>
+                                            Minha formação foi marcada pelo contato direto com diferentes realidades, especialmente em contextos clínicos, sociais, e voluntários, o que consolidou em mim um olhar atento às singularidades e às múltiplas formas de viver.
+                                        </p>
+                                        <p>
+                                            A arte também ocupa um lugar importante na minha forma de compreender o mundo. Acredito nela como um caminho de expressão e acesso à experiência humana. Confio no potencial de desenvolvimento que cada um carrega e na possibilidade de ampliarmos, continuamente, a compreensão sobre nós mesmos.
+                                        </p>
+                                        <p>
+                                            Ofereço um trabalho fundamentado na ética, na parceria terapêutica e no compromisso com práticas baseadas na ciência.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+
+                    <div className="w-full overflow-hidden leading-none">
+                        <svg className="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-[#0A3928]"></path>
+                        </svg>
+                    </div>
+
+                    {/* Abordagem Humanista Section (Antigo Manifesto) */}
+                    <section id="abordagem" className={`${colors.bgDarkGreen} text-[#F3F0E6] py-24 overflow-hidden`}>
+                        <div className="max-w-7xl mx-auto px-6 mb-12">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                                <div>
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <Star className="text-[#0038FF] fill-[#0038FF]" size={40} />
+                                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight">Abordagem Humanista</h2>
+                                    </div>
+                                    <div className="space-y-6 text-lg font-medium leading-relaxed opacity-90">
+                                        <p>
+                                            Trabalho a partir de uma perspectiva humanista, valorizando a forma como cada pessoa vive e sente a própria história. Minha prática é inspirada na <strong>Abordagem Centrada na Pessoa e na fenomenologia</strong>, compreendendo você como alguém único, com experiências, relações e sentidos que merecem ser escutados com cuidado.
+                                        </p>
+
+                                        <div className="bg-[#0038FF] p-6 -rotate-1 shadow-lg text-white border-2 border-white/20">
+                                            <p className="font-bold text-xl italic">"Ser quem você é de verdade é o primeiro passo para qualquer mudança."</p>
+                                        </div>
+
+                                        <p>
+                                            A terapia é construída em parceria, com ética, respeito e atenção ao seu tempo. Busco oferecer um espaço de acolhimento e confiança, favorecendo autonomia e a possibilidade de encontrar novos significados para aquilo que é vivido.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Coluna da direita com o Carrossel */}
+                                <div className="flex flex-col justify-center h-full pt-8">
+                                    <div className="relative w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] mx-auto border-4 border-[#0038FF] bg-[#F3F0E6] rounded-full shadow-[10px_10px_0px_0px_rgba(0,0,0,0.5)] rotate-2 flex flex-col items-center justify-center p-10 hover:rotate-6 transition-transform duration-300">
+                                        <Heart size={40} className="text-[#0038FF] mb-4" fill="currentColor" />
+                                        <h3 className="text-[#0A3928] text-2xl md:text-3xl font-black uppercase text-center leading-tight mb-3">
+                                            Foco do Atendimento
+                                        </h3>
+                                        <p className="text-[#0A3928] text-center text-base md:text-lg font-bold opacity-90">
+                                            Atendimento online voltado para adolescentes e adultos
+                                        </p>
+                                        <div className="absolute -top-4 -right-4 text-[#0038FF] animate-spin-slow">
+                                            <Sparkles size={48} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CARROSSEL AUTOMÁTICO DE IMAGENS */}
+                        <div className="relative w-full py-8 bg-[#0038FF]/10 rotate-[-1deg] scale-110 border-y-4 border-[#0038FF]">
+                            <div className="flex animate-scroll w-[200%] hover:pause-hover">
+                                {[...carouselImages, ...carouselImages].map((imgName, index) => (
+                                    <div key={index} className="flex-shrink-0 mx-4 w-64 h-80 border-4 border-[#F3F0E6] shadow-lg overflow-hidden bg-gray-300 relative group">
+                                        <img
+                                            src={imgName}
+                                            alt={`Foto Carrossel ${index}`}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.parentNode.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center bg-gray-200 text-[#0A3928] p-4 text-center text-xs font-bold uppercase"><span>${imgName}</span><br/><span class="font-normal normal-case opacity-70">Salve a foto na pasta</span></div>`
+                                            }}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-[#0A3928]/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <div className="w-full overflow-hidden leading-none rotate-180">
+                        <svg className="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-[#0A3928]"></path>
+                        </svg>
+                    </div>
+
+                    {/* Services Section */}
+                    <section id="servicos" className="py-24 bg-[#F3F0E6]">
+                        <div className="max-w-6xl mx-auto px-6">
+                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-center mb-16 text-[#0A3928]">
+                                Formatos de <span className="underline decoration-[#0038FF] decoration-wavy decoration-4">Troca</span>
+                            </h2>
+
+                            <div className="grid grid-cols-1 gap-8 max-w-lg mx-auto pb-12 w-full px-4 md:px-0">
+                                {/* Card Online */}
+                                <div className="border-4 border-[#0038FF] bg-[#0038FF] text-white p-8 md:p-12 relative hover:-translate-y-2 transition-transform duration-300 shadow-[10px_10px_0px_0px_#0A3928] aspect-square flex flex-col justify-center">
+                                    <div className="absolute top-6 right-6 animate-pulse text-white/50">
+                                        <Sparkles size={36} />
+                                    </div>
+                                    <div className="flex-grow flex flex-col justify-center">
+                                        <h3 className="text-3xl md:text-4xl font-black uppercase mb-4 leading-tight">Online <br className="hidden md:block"/>(Mundo)</h3>
+                                        <p className="font-medium text-lg md:text-xl mb-6 leading-relaxed opacity-90">
+                                            Pra quem tá longe ou prefere o conforto do próprio quarto. A mesma profundidade, só que mediada pela tela. Funciona, e muito.
+                                        </p>
+                                    </div>
+                                    <button onClick={() => setIsBookingModalOpen(true)} className="w-full py-4 text-lg md:text-xl bg-white text-[#0038FF] font-black tracking-widest uppercase hover:bg-[#F3F0E6] transition-colors border-4 border-transparent shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-none hover:translate-y-1 active:translate-y-2">
+                                        Agendar Minha Sessão
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-[#0A3928] text-[#F3F0E6] border-t-8 border-[#0038FF]">
+                        <div className="max-w-7xl mx-auto px-6 py-16">
+                            <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+                                <div>
+                                    <h2 className="text-4xl font-black uppercase mb-4">Alyne<span className="text-[#0038FF]">.Psi</span></h2>
+                                    <p className="font-bold max-w-xs opacity-70">
+                                        Psicologia, Arte e Identidade.<br />
+                                        Itajubá - Minas Gerais & Online
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-col gap-4">
+                                    <a href="https://instagram.com/alynediaas_" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-bold hover:text-[#0038FF] transition-colors">
+                                        <Instagram /> @alynediaas_
+                                    </a>
+                                    <a href="https://wa.me/5535991749264" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-bold hover:text-[#0038FF] transition-colors">
+                                        <MessageCircle /> (35) 99174-9264
+                                    </a>
+                                    <a href="mailto:alynediascontato@gmail.com" className="flex items-center gap-3 font-bold hover:text-[#0038FF] transition-colors">
+                                        <Mail /> alynediascontato@gmail.com
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* MODAL SIMPLIFICADO - AGORA SÓ COM BOTÃO WHATSAPP */}
+                    {isBookingModalOpen && (
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#0A3928]/80 backdrop-blur-sm animate-fade-in">
+                            <div className="bg-[#F3F0E6] border-4 border-black w-full max-w-md shadow-[10px_10px_0px_0px_#0038FF] overflow-hidden">
+                                <div className="bg-[#0A3928] p-4 flex justify-between items-center text-[#F3F0E6]">
+                                    <h3 className="font-black text-xl uppercase tracking-widest flex items-center gap-2">
+                                        <Star size={20} fill="currentColor" className="text-[#0038FF]" /> Agendar
+                                    </h3>
+                                    <button onClick={() => setIsBookingModalOpen(false)} className="hover:rotate-90 transition-transform"><XIcon size={24} /></button>
+                                </div>
+
+                                <div className="p-8 flex flex-col items-center text-center space-y-6">
+                                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-2 animate-bounce">
+                                        <MessageCircle size={40} />
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-2xl font-black text-[#0A3928] uppercase mb-2">Vamos conversar?</h4>
+                                        <p className="text-[#0A3928]/80 font-medium">
+                                            Clique no botão abaixo para iniciar seu atendimento diretamente pelo WhatsApp.
+                                        </p>
+                                    </div>
+
+                                    <button
+                                        onClick={handleWhatsAppClick}
+                                        className="w-full py-4 bg-green-600 text-white font-black uppercase tracking-wider text-lg rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center gap-2 hover:bg-green-700 border-2 border-black"
+                                    >
+                                        <MessageCircle size={24} />
+                                        Agendar Sessão
+                                    </button>
+
+                                    <p className="text-xs text-[#0A3928]/60 font-bold uppercase tracking-widest mt-4">
+                                        Resposta em até 24h úteis
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
